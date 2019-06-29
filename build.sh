@@ -60,7 +60,7 @@ init_qemu
 
 # Patch python dependencies
 echo "urllib3<1.25,>=1.21.1" >> requirements.txt
-sed -i "s#\(FROM.*\)#\1\nRUN apt-get update && apt-get install -y python3-dev gcc#" ./Dockerfile
+sed "s#\(FROM.*\)#\1\nRUN apt-get update \&\& apt-get install -y python3-dev gcc#" ./Dockerfile
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 build_and_push_images amd64 ./Dockerfile
