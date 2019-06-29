@@ -59,7 +59,7 @@ init_qemu
 
 # Patch python dependencies
 echo "urllib3<1.25,>=1.21.1" >> requirements.txt
-sed "s#\(FROM.*\)#\1\nCOPY qemu-arm-static /usr/bin/\nRUN apt-get update \&\& apt-get install -y python3-dev gcc\n#" ./Dockerfile
+sed -i "s#\(FROM.*\)#\1\nCOPY qemu-arm-static /usr/bin/\nRUN apt-get update \&\& apt-get install -y python3-dev gcc\n#" ./Dockerfile
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 build_and_push_images amd64 ./Dockerfile
