@@ -58,6 +58,9 @@ build_manifests() {
 fetch_sources
 init_qemu
 
+# Patch python dependencies
+echo "urllib3<1.25,>=1.21.1" >> requirements.txt
+
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 build_and_push_images amd64 ./Dockerfile
 
