@@ -6,7 +6,6 @@ MAJOR_VERSION=0.0
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
 set -e
-set -x
 
 init_qemu() {
     local qemu_url='https://github.com/multiarch/qemu-user-static/releases/download/v2.9.1-1'
@@ -60,12 +59,12 @@ init_qemu
 
 # Patch python dependencies
 echo "urllib3<1.25,>=1.21.1" >> requirements.txt
-sed "s#\(FROM.*\)#\1\nRUN apt-get update \&\& apt-get install -y python3-dev gcc#" ./Dockerfile
+sed "s#\(FROM.*\)#\1\nRUN apt-get update \&\& apt-get install -y python3-dev gcc\nCOPY qemu-arm-static /usr/bin/\n#" ./Dockerfile
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 build_and_push_images amd64 ./Dockerfile
 
-sed "s#FROM\( \+\)python:\(.*\)#FROM\1arm32v7/python:\2\n\nCOPY qemu-arm-static /usr/bin/\n#" Dockerfile > Dockerfile.arm
+sed "s#FROM\( \+\)python:\(.*\)#FROM\1arm32v7/python:\2\n#" Dockerfile > Dockerfile.arm
 build_and_push_images arm ./Dockerfile.arm
 
 build_manifests
