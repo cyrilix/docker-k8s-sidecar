@@ -12,7 +12,7 @@ init_qemu() {
 
     docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
-    for target_arch in aarch64 arm x86_64; do
+    for target_arch in aarch64 arm arm64 x86_64; do
         wget "${qemu_url}/x86_64_qemu-${target_arch}-static.tar.gz";
         tar -xvf "x86_64_qemu-${target_arch}-static.tar.gz";
     done
