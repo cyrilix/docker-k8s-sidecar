@@ -43,14 +43,17 @@ build_and_push_images() {
 build_manifests() {
     docker -D manifest create "${IMG_NAME}:${VERSION}" "${IMG_NAME}:amd64-${VERSION}" "${IMG_NAME}:arm-${VERSION}" --amend
     docker -D manifest annotate "${IMG_NAME}:${VERSION}" "${IMG_NAME}:arm-${VERSION}" --os=linux --arch=arm --variant=v7
+    docker -D manifest annotate "${IMG_NAME}:${VERSION}" "${IMG_NAME}:arm64-${VERSION}" --os=linux --arch=arm64 --variant=v8
     docker -D manifest push "${IMG_NAME}:${VERSION}"
 
     docker -D manifest create "${IMG_NAME}:latest" "${IMG_NAME}:amd64-latest" "${IMG_NAME}:arm-latest" --amend
     docker -D manifest annotate "${IMG_NAME}:latest" "${IMG_NAME}:arm-latest" --os=linux --arch=arm --variant=v7
+    docker -D manifest annotate "${IMG_NAME}:latest" "${IMG_NAME}:arm64-latest" --os=linux --arch=arm64 --variant=v8
     docker -D manifest push "${IMG_NAME}:latest"
 
     docker -D manifest create "${IMG_NAME}:${MAJOR_VERSION}" "${IMG_NAME}:amd64-${MAJOR_VERSION}" "${IMG_NAME}:arm-${MAJOR_VERSION}" --amend
     docker -D manifest annotate "${IMG_NAME}:${MAJOR_VERSION}" "${IMG_NAME}:arm-${MAJOR_VERSION}" --os=linux --arch=arm --variant=v7
+    docker -D manifest annotate "${IMG_NAME}:${MAJOR_VERSION}" "${IMG_NAME}:arm64-${MAJOR_VERSION}" --os=linux --arch=arm64 --variant=v8
     docker -D manifest push "${IMG_NAME}:${MAJOR_VERSION}"
 }
 
@@ -66,5 +69,8 @@ build_and_push_images amd64 ./Dockerfile
 
 sed "s#FROM\( \+\)python:\(.*\)#FROM\1arm32v7/python:\2\n#" Dockerfile > Dockerfile.arm
 build_and_push_images arm ./Dockerfile.arm
+
+sed "s#FROM\( \+\)python:\(.*\)#FROM\1arm64v8/python:\2\n#" Dockerfile > Dockerfile.arm64
+build_and_push_images arm64 ./Dockerfile.arm64
 
 build_manifests
