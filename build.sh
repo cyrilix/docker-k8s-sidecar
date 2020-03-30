@@ -1,8 +1,8 @@
 #! /bin/bash
 
 IMG_NAME=cyrilix/k8s-sidecar
-VERSION=0.0.16
-MAJOR_VERSION=0.0
+VERSION=0.1.99
+MAJOR_VERSION=0.1
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
 set -e
