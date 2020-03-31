@@ -66,7 +66,7 @@ patch_dockerfile() {
     sed "s#\(FROM \)\(node:.*\)#\1${docker_arch}/\2\n\nCOPY qemu-${qemu_arch}-static /usr/bin/\n#" ${dockerfile_orig} > ${dockerfile_dest}
     sed -i "s#FROM .*node:.*-alpine#FROM ${docker_arch}/node:6#" ${dockerfile_dest}
 
-    sed "s#\(FROM.*\)#\1\nCOPY qemu-${qemu_arch}-static /usr/bin/\nRUN apt-get update \&\& apt-get install -y python3-dev gcc libffi-dev libssl-dev\n#" ${dockerfile_orig} > ${dockerfile_dest}
+    sed "s#\(FROM.*\)#\1\nCOPY qemu-${qemu_arch}-static /usr/bin/\n#" ${dockerfile_orig} > ${dockerfile_dest}
     sed -i "s#FROM\( \+\)python:\(.*\)#FROM\1${docker_arch}/python:\2\n#" ${dockerfile_dest}
 }
 fetch_sources
